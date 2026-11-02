@@ -287,7 +287,7 @@ ol.steps li{margin-bottom:4px}
         if(!s.title||/^\[/.test(s.title))s.title=base.replace(/-/g,' ');
         renderVids();markDirty();setStatus('Video uploaded. Click Save and publish to put it on the site.');
       })
-      .catch(function(e){setStatus('Upload failed: '+e.message,'err');btn.textContent='Upload video';})
+      .catch(function(e){setStatus(/not accessible/i.test(e.message)?'Your token can read but not write. Edit it on GitHub: Contents → Read and write.':'Upload failed: '+e.message,'err');btn.textContent='Upload video';})
       .then(function(){busy--;if(!busy)$('save').disabled=false;});
     };
     r.readAsDataURL(file);
@@ -301,7 +301,7 @@ ol.steps li{margin-bottom:4px}
     gh('content.json',{method:'PUT',body:JSON.stringify({message:'Update site content from admin',content:b64(JSON.stringify(out,null,2)+'\n'),sha:sha,branch:BRANCH})})
     .then(function(j){sha=j.content.sha;dirty=false;setStatus('Saved. The site updates in about 30 seconds.','ok');})
     .catch(function(e){
-      setStatus(e.status===409?'The content changed somewhere else. Reload this page and make your changes again.':'Save failed: '+e.message,'err');
+      setStatus(e.status===409?'The content changed somewhere else. Reload this page and make your changes again.':e.status===403?'Your token can read but not write. Edit it on GitHub: Contents → Read and write.':'Save failed: '+e.message,'err');
     }).then(function(){$('save').disabled=false;});
   }
 
