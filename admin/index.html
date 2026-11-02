@@ -111,7 +111,7 @@ ol.steps li{margin-bottom:4px}
       <div class="vids" id="vids"></div>
       <div class="row" style="margin-top:14px">
         <button class="btn" id="addVid">Add video</button>
-        <span class="hint" style="margin:0">Best: upload to YouTube as Unlisted and paste the link. Free, no limit on views.</span>
+        <span class="hint" style="margin:0">Best: upload to YouTube (Unlisted) or Vimeo and paste the link.</span>
       </div>
     </div>
 
@@ -214,9 +214,12 @@ ol.steps li{margin-bottom:4px}
     data.slides.forEach(function(s,i){
       var el=document.createElement('div');el.className='vid';
       var thumb=document.createElement('div');thumb.className='thumb';
-      var yid=ytId(s.src);
-      if(yid){var im=document.createElement('img');im.src='https://i.ytimg.com/vi/'+yid+'/hqdefault.jpg';im.alt='';im.style.cssText='width:100%;height:100%;object-fit:cover';thumb.appendChild(im);
-        var yb=document.createElement('span');yb.className='ytb';yb.textContent='YouTube';thumb.appendChild(yb);}
+      var yid=ytId(s.src), vim=/vimeo\.com\//.test(s.src||'');
+      if(yid||vim){var im=document.createElement('img');im.alt='';im.style.cssText='width:100%;height:100%;object-fit:cover';
+        if(yid)im.src='https://i.ytimg.com/vi/'+yid+'/hqdefault.jpg';
+        else fetch('https://vimeo.com/api/oembed.json?url='+encodeURIComponent(s.src)).then(function(r){return r.json();}).then(function(j){if(j.thumbnail_url)im.src=j.thumbnail_url;}).catch(function(){});
+        thumb.appendChild(im);
+        var yb=document.createElement('span');yb.className='ytb';yb.textContent=yid?'YouTube':'Vimeo';thumb.appendChild(yb);}
       else if(s._local||s.src){var v=document.createElement('video');v.src=s._local||preview(s.src);v.muted=true;v.loop=true;v.playsInline=true;v.autoplay=true;v.setAttribute('playsinline','');thumb.appendChild(v);}
       else thumb.appendChild(document.createTextNode('No video yet'));
       var num=document.createElement('span');num.className='num';num.textContent=i+1;thumb.appendChild(num);
@@ -227,8 +230,8 @@ ol.steps li{margin-bottom:4px}
       f.appendChild(field('Tag','tag',s));
       var lw=document.createElement('div');lw.className='full';
       var lid='l'+Math.random().toString(36).slice(2);
-      var ll=document.createElement('label');ll.htmlFor=lid;ll.textContent='Video link (YouTube or .mp4)';
-      var li=document.createElement('input');li.type='url';li.id=lid;li.placeholder='https://youtube.com/shorts/...';
+      var ll=document.createElement('label');ll.htmlFor=lid;ll.textContent='Video link (YouTube, Vimeo or .mp4)';
+      var li=document.createElement('input');li.type='url';li.id=lid;li.placeholder='https://youtube.com/shorts/... or https://vimeo.com/...';
       li.value=/^https?:/.test(s.src||'')?s.src:'';
       li.onchange=function(){s.src=li.value.trim();delete s._local;renderVids();markDirty();};
       lw.appendChild(ll);lw.appendChild(li);
