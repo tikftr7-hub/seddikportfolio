@@ -46,6 +46,7 @@ input:focus,textarea:focus{border-color:var(--lime);outline:none}
 .vid{display:grid;grid-template-columns:120px 1fr auto;gap:16px;align-items:start;background:var(--card-2);border:1px solid var(--line);border-radius:16px;padding:14px}
 .thumb{width:120px;aspect-ratio:9/16;border-radius:10px;overflow:hidden;background:#0E0E12;display:grid;place-items:center;color:var(--muted);font-size:12px;text-align:center;position:relative}
 .thumb video{width:100%;height:100%;object-fit:cover}
+.ytb{position:absolute;bottom:6px;left:6px;right:6px;background:rgba(0,0,0,.7);font-size:11px;font-weight:700;border-radius:6px;padding:2px 4px;color:#fff}
 .num{position:absolute;top:6px;left:6px;background:var(--lime);color:var(--lime-ink);font-weight:800;font-size:12px;width:22px;height:22px;border-radius:7px;display:grid;place-items:center}
 .vf{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .vf .full{grid-column:1/-1}
@@ -110,7 +111,7 @@ ol.steps li{margin-bottom:4px}
       <div class="vids" id="vids"></div>
       <div class="row" style="margin-top:14px">
         <button class="btn" id="addVid">Add video</button>
-        <span class="hint" style="margin:0">MP4, under 50 MB each. Compress with HandBrake if it's bigger.</span>
+        <span class="hint" style="margin:0">Best: upload to YouTube as Unlisted and paste the link. Free, no limit on views.</span>
       </div>
     </div>
 
@@ -202,13 +203,21 @@ ol.steps li{margin-bottom:4px}
   }
 
   // ---- videos
+  function ytId(u){
+    if(!u)return null;
+    var m=String(u).match(/(?:youtube\.com\/(?:watch\?(?:.*&)?v=|shorts\/|embed\/|live\/)|youtu\.be\/)([A-Za-z0-9_-]{11})/);
+    return m?m[1]:null;
+  }
   function preview(src){return src?(/^https?:/.test(src)?src:'../'+src):'';}
   function renderVids(){
     var box=$('vids');box.innerHTML='';
     data.slides.forEach(function(s,i){
       var el=document.createElement('div');el.className='vid';
       var thumb=document.createElement('div');thumb.className='thumb';
-      if(s._local||s.src){var v=document.createElement('video');v.src=s._local||preview(s.src);v.muted=true;v.loop=true;v.playsInline=true;v.autoplay=true;v.setAttribute('playsinline','');thumb.appendChild(v);}
+      var yid=ytId(s.src);
+      if(yid){var im=document.createElement('img');im.src='https://i.ytimg.com/vi/'+yid+'/hqdefault.jpg';im.alt='';im.style.cssText='width:100%;height:100%;object-fit:cover';thumb.appendChild(im);
+        var yb=document.createElement('span');yb.className='ytb';yb.textContent='YouTube';thumb.appendChild(yb);}
+      else if(s._local||s.src){var v=document.createElement('video');v.src=s._local||preview(s.src);v.muted=true;v.loop=true;v.playsInline=true;v.autoplay=true;v.setAttribute('playsinline','');thumb.appendChild(v);}
       else thumb.appendChild(document.createTextNode('No video yet'));
       var num=document.createElement('span');num.className='num';num.textContent=i+1;thumb.appendChild(num);
 
@@ -216,8 +225,16 @@ ol.steps li{margin-bottom:4px}
       f.appendChild(field('Title','title',s,'full'));
       f.appendChild(field('Subtitle','subtitle',s));
       f.appendChild(field('Tag','tag',s));
-      var src=document.createElement('div');src.className='full src';src.textContent=s.src?('File: '+s.src):'Upload a video to show it in the carousel.';
-      f.appendChild(src);
+      var lw=document.createElement('div');lw.className='full';
+      var lid='l'+Math.random().toString(36).slice(2);
+      var ll=document.createElement('label');ll.htmlFor=lid;ll.textContent='Video link (YouTube or .mp4)';
+      var li=document.createElement('input');li.type='url';li.id=lid;li.placeholder='https://youtube.com/shorts/...';
+      li.value=/^https?:/.test(s.src||'')?s.src:'';
+      li.onchange=function(){s.src=li.value.trim();delete s._local;renderVids();markDirty();};
+      lw.appendChild(ll);lw.appendChild(li);
+      var src=document.createElement('div');src.className='src';src.style.marginTop='6px';
+      src.textContent=s.src&&!/^https?:/.test(s.src)?('Uploaded file: '+s.src):'Paste a link, or upload a file (counts toward Vercel bandwidth).';
+      lw.appendChild(src);f.appendChild(lw);
 
       var t=document.createElement('div');t.className='tools';
       var up=document.createElement('label');up.className='btn upl';up.textContent=s.src?'Replace video':'Upload video';

@@ -60,6 +60,8 @@ h1{font-size:clamp(44px,7.2vw,96px);line-height:.95;letter-spacing:-.045em;font-
 .slide:not(.is-active){filter:brightness(.62) saturate(.8)}
 .slide:not(.is-active):hover{filter:brightness(.85)}
 .slide video,.slide .ph{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.slide iframe.yt{position:absolute;inset:0;width:100%;height:100%;border:0;pointer-events:none;background:#000}
+.slide iframe.yt:not([src]){display:none}
 .ph{display:grid;place-items:center;text-align:center;padding:20px;color:rgba(255,255,255,.55);font-weight:600;font-size:15px}
 .slide .meta{position:absolute;left:0;right:0;bottom:0;padding:44px 20px 18px;background:linear-gradient(transparent,rgba(0,0,0,.82));display:flex;justify-content:space-between;align-items:flex-end;gap:12px;opacity:0;transition:opacity .4s}
 .slide.is-active .meta{opacity:1}
@@ -286,6 +288,12 @@ footer a:hover{color:var(--text)}
   var HUES=[250,160,20,300,200,80,120,340];
   var slides=[], n=0, cur=0, timer=null;
 
+  function ytId(u){
+    if(!u)return null;
+    var m=String(u).match(/(?:youtube\.com\/(?:watch\?(?:.*&)?v=|shorts\/|embed\/|live\/)|youtu\.be\/)([A-Za-z0-9_-]{11})/);
+    return m?m[1]:null;
+  }
+  function ytSrc(id){return 'https://www.youtube-nocookie.com/embed/'+id+'?autoplay=1&mute=1&loop=1&playlist='+id+'&controls=0&modestbranding=1&playsinline=1&rel=0&iv_load_policy=3&disablekb=1';}
   function esc(t){var d=document.createElement('div');d.textContent=t==null?'':String(t);return d.innerHTML;}
 
   // Fill texts and links from content.json
@@ -319,7 +327,16 @@ footer a:hover{color:var(--text)}
       var h=HUES[i%HUES.length];
       var ph=s.querySelector('.ph');
       ph.style.background='radial-gradient(circle at 30% 20%,hsl('+h+' 70% 30% / .9),transparent 60%),radial-gradient(circle at 80% 90%,hsl('+((h+60)%360)+' 70% 22% / .9),transparent 55%),#0E0E12';
-      if(s.dataset.src){
+      var yid=ytId(s.dataset.src);
+      if(yid){
+        var f=document.createElement('iframe');
+        f.className='yt'; f.dataset.yt=yid; f.title='Video '+(i+1);
+        f.setAttribute('allow','autoplay; encrypted-media; picture-in-picture');
+        f.setAttribute('tabindex','-1');
+        ph.style.backgroundImage='url(https://i.ytimg.com/vi/'+yid+'/hqdefault.jpg)';
+        ph.style.backgroundSize='cover';ph.style.backgroundPosition='center';ph.textContent='';
+        s.insertBefore(f,s.querySelector('.meta'));
+      }else if(s.dataset.src){
         var v=document.createElement('video');
         v.src=s.dataset.src; v.muted=true; v.loop=true; v.playsInline=true; v.preload='metadata';
         v.setAttribute('playsinline','');
@@ -367,6 +384,8 @@ footer a:hover{color:var(--text)}
       s.setAttribute('aria-hidden',d===0?'false':'true');
       var v=s.querySelector('video');
       if(v){ if(d===0&&!reduce){var pr=v.play();if(pr&&pr.catch)pr.catch(function(){});} else v.pause(); }
+      var yf=s.querySelector('iframe.yt');
+      if(yf){ var want=d===0?ytSrc(yf.dataset.yt):''; if(yf.getAttribute('src')!==want){ if(want)yf.setAttribute('src',want); else yf.removeAttribute('src'); } }
     });
     [].forEach.call(dotsBox.querySelectorAll('.dot'),function(d,i){d.setAttribute('aria-current',i===cur?'true':'false');});
   }
