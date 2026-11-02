@@ -1,0 +1,21 @@
+{
+  "pill": "Taking 2 new SaaS launches this month",
+  "headline": "Launch videos for SaaS that people actually watch.",
+  "intro": "I'm Seddik, a motion designer. I animate your real product UI in After Effects and turn it into launch videos, demos and clips for X and LinkedIn.",
+  "launchPrice": "[PRICE]",
+  "monthlyPrice": "[PRICE]",
+  "days": "[X]",
+  "email": "",
+  "calendly": "",
+  "x": "",
+  "linkedin": "",
+  "instagram": "https://instagram.com/_.sdimohammed.edit",
+  "slides": [
+    { "src": "", "title": "[Product name]", "subtitle": "Launch video, 45s", "tag": "Launch" },
+    { "src": "", "title": "[Product name]", "subtitle": "Feature demo, 30s", "tag": "Demo" },
+    { "src": "", "title": "[Client name]", "subtitle": "LinkedIn clip, 20s", "tag": "Clip" },
+    { "src": "", "title": "[Product name]", "subtitle": "Paid ad, 15s", "tag": "Ad" },
+    { "src": "", "title": "[Product name]", "subtitle": "Onboarding, 60s", "tag": "Demo" },
+    { "src": "", "title": "Motion reel", "subtitle": "Selected work, 40s", "tag": "Reel" }
+  ]
+}

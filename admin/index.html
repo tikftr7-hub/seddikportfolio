@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Admin — Seddik</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;800;900&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#030304;--card:#111114;--card-2:#18181D;--line:#26262D;--text:#F4F4F6;--muted:#9A9AA6;--lime:#D4FF2A;--lime-ink:#0A0B02;--red:#FF6B6B}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font-family:"Inter Tight",system-ui,sans-serif;font-size:15px;line-height:1.5;-webkit-font-smoothing:antialiased}
+:focus-visible{outline:2px solid var(--lime);outline-offset:2px}
+a{color:var(--lime)}
+.top{position:sticky;top:0;z-index:20;background:rgba(3,3,4,.85);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+.top .in{max-width:980px;margin:0 auto;padding:0 20px;height:64px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.logo{display:flex;align-items:center;gap:10px;font-weight:900;font-size:18px}
+.logo i{width:24px;height:24px;border-radius:7px;background:var(--lime);display:grid;place-items:center}
+.logo small{font-weight:500;color:var(--muted);font-size:14px}
+main{max-width:980px;margin:0 auto;padding:28px 20px 120px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:24px;margin-bottom:16px}
+.card h2{margin:0 0 4px;font-size:20px;font-weight:800;letter-spacing:-.02em}
+.card > p{margin:0 0 18px;color:var(--muted)}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.full{grid-column:1/-1}
+label{display:block;font-size:13px;font-weight:600;color:var(--muted);margin-bottom:6px}
+input[type=text],input[type=password],input[type=email],input[type=url],textarea{width:100%;background:var(--card-2);border:1px solid var(--line);border-radius:12px;color:var(--text);font:inherit;padding:11px 13px;min-height:44px}
+textarea{resize:vertical;min-height:84px}
+input:focus,textarea:focus{border-color:var(--lime);outline:none}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:44px;padding:0 18px;border-radius:999px;font:inherit;font-weight:700;border:1px solid var(--line);background:var(--card-2);color:var(--text);cursor:pointer;text-decoration:none}
+.btn:hover{background:#202027}
+.btn-lime{background:var(--lime);color:var(--lime-ink);border-color:var(--lime)}
+.btn-lime:hover{background:#E2FF66}
+.top .row{flex-wrap:nowrap}
+.btn{white-space:nowrap}
+.btn[disabled]{opacity:.5;cursor:not-allowed}
+.icon{width:40px;height:40px;min-height:40px;padding:0;border-radius:12px}
+.icon.danger:hover{background:#3a1515;border-color:#5a2020;color:var(--red)}
+.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.hint{font-size:13px;color:var(--muted);margin-top:8px}
+
+/* videos */
+.vids{display:grid;gap:12px}
+.vid{display:grid;grid-template-columns:120px 1fr auto;gap:16px;align-items:start;background:var(--card-2);border:1px solid var(--line);border-radius:16px;padding:14px}
+.thumb{width:120px;aspect-ratio:9/16;border-radius:10px;overflow:hidden;background:#0E0E12;display:grid;place-items:center;color:var(--muted);font-size:12px;text-align:center;position:relative}
+.thumb video{width:100%;height:100%;object-fit:cover}
+.num{position:absolute;top:6px;left:6px;background:var(--lime);color:var(--lime-ink);font-weight:800;font-size:12px;width:22px;height:22px;border-radius:7px;display:grid;place-items:center}
+.vf{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.vf .full{grid-column:1/-1}
+.tools{display:flex;flex-direction:column;gap:6px}
+.upl{position:relative;overflow:hidden}
+.upl input{position:absolute;inset:0;opacity:0;cursor:pointer}
+.src{font-size:12px;color:var(--muted);overflow-wrap:anywhere}
+
+/* save bar */
+.bar{position:fixed;left:0;right:0;bottom:0;background:rgba(17,17,20,.92);backdrop-filter:blur(12px);border-top:1px solid var(--line);z-index:30}
+.bar .in{max-width:980px;margin:0 auto;padding:12px 20px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+#status{color:var(--muted);font-size:14px}
+#status.ok{color:var(--lime)}
+#status.err{color:var(--red)}
+.hidden{display:none!important}
+ol.steps{margin:0 0 14px;padding-left:20px;color:var(--muted)}
+ol.steps li{margin-bottom:4px}
+@media (max-width:700px){
+  .grid,.vf{grid-template-columns:1fr}
+  .vid{grid-template-columns:84px 1fr}
+  .thumb{width:84px}
+  .tools{grid-column:1/-1;flex-direction:row;flex-wrap:wrap}
+  .top .btn{min-height:38px;padding:0 12px;font-size:13px}
+  .logo small{display:none}
+}
+</style>
+</head>
+<body>
+
+<div class="top"><div class="in">
+  <div class="logo"><i aria-hidden="true"><svg width="12" height="12" viewBox="0 0 14 14"><path d="M4 2.5v9l7.5-4.5z" fill="#0A0B02"/></svg></i>Seddik <small>Admin</small></div>
+  <div class="row">
+    <a class="btn" href="../" target="_blank" rel="noopener">View site</a>
+    <button class="btn hidden" id="logout">Disconnect</button>
+  </div>
+</div></div>
+
+<main>
+  <!-- connect -->
+  <div class="card" id="connectCard">
+    <h2>Connect to GitHub</h2>
+    <p>Your site's content lives in the GitHub repo. Saving here commits to it, and Vercel publishes the change in about 30 seconds.</p>
+    <ol class="steps">
+      <li>Open <a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener">github.com/settings/personal-access-tokens/new</a></li>
+      <li>Repository access: <b>Only select repositories</b> → <b>seddikportfolio</b></li>
+      <li>Permissions → Repository → <b>Contents: Read and write</b></li>
+      <li>Generate, copy the token and paste it below</li>
+    </ol>
+    <label for="token">GitHub token</label>
+    <input type="password" id="token" placeholder="github_pat_..." autocomplete="off">
+    <div class="row" style="margin-top:12px">
+      <button class="btn btn-lime" id="connect">Connect</button>
+      <label style="display:flex;align-items:center;gap:8px;margin:0;font-weight:500"><input type="checkbox" id="remember" checked> Remember on this browser</label>
+    </div>
+    <p class="hint" id="connectMsg"></p>
+  </div>
+
+  <div id="editor" class="hidden">
+    <div class="card">
+      <h2>Videos</h2>
+      <p>The carousel shows them in this order. The first one is in the center when the page opens.</p>
+      <div class="vids" id="vids"></div>
+      <div class="row" style="margin-top:14px">
+        <button class="btn" id="addVid">Add video</button>
+        <span class="hint" style="margin:0">MP4, under 50 MB each. Compress with HandBrake if it's bigger.</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Hero</h2>
+      <p>The top of the page.</p>
+      <div class="grid">
+        <div class="full"><label for="f-pill">Badge</label><input type="text" id="f-pill" data-k="pill"></div>
+        <div class="full"><label for="f-headline">Headline</label><input type="text" id="f-headline" data-k="headline"></div>
+        <div class="full"><label for="f-intro">Intro</label><textarea id="f-intro" data-k="intro"></textarea></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Pricing</h2>
+      <p>Write the price as you want it shown, for example $900.</p>
+      <div class="grid">
+        <div><label for="f-launch">Launch video price</label><input type="text" id="f-launch" data-k="launchPrice"></div>
+        <div><label for="f-monthly">Monthly content price</label><input type="text" id="f-monthly" data-k="monthlyPrice"></div>
+        <div><label for="f-days">Days to deliver a launch video</label><input type="text" id="f-days" data-k="days"></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Contact and links</h2>
+      <p>Empty social links are hidden on the site.</p>
+      <div class="grid">
+        <div><label for="f-email">Email</label><input type="email" id="f-email" data-k="email" placeholder="you@email.com"></div>
+        <div><label for="f-cal">Calendly link</label><input type="url" id="f-cal" data-k="calendly" placeholder="https://calendly.com/..."></div>
+        <div><label for="f-x">X profile</label><input type="url" id="f-x" data-k="x" placeholder="https://x.com/..."></div>
+        <div><label for="f-li">LinkedIn profile</label><input type="url" id="f-li" data-k="linkedin" placeholder="https://linkedin.com/in/..."></div>
+        <div><label for="f-ig">Instagram</label><input type="url" id="f-ig" data-k="instagram"></div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<div class="bar hidden" id="bar"><div class="in">
+  <span id="status" role="status" aria-live="polite">No changes</span>
+  <button class="btn btn-lime" id="save">Save and publish</button>
+</div></div>
+
+<script>
+(function(){
+  var OWNER='tikftr7-hub', REPO='seddikportfolio', BRANCH='main', API='https://api.github.com/repos/'+OWNER+'/'+REPO+'/contents/';
+  var token='', sha=null, data=null, dirty=false, busy=0;
+  var $=function(id){return document.getElementById(id);};
+
+  function store(k,v){try{v==null?localStorage.removeItem(k):localStorage.setItem(k,v);}catch(e){}}
+  function read(k){try{return localStorage.getItem(k);}catch(e){return null;}}
+  function b64(str){return btoa(unescape(encodeURIComponent(str)));}
+  function unb64(s){return decodeURIComponent(escape(atob(s.replace(/\n/g,''))));}
+  function setStatus(t,cls){var s=$('status');s.textContent=t;s.className=cls||'';}
+  function markDirty(){dirty=true;setStatus('Unsaved changes');}
+
+  function gh(path,opts){
+    opts=opts||{};
+    opts.headers={'Authorization':'Bearer '+token,'Accept':'application/vnd.github+json'};
+    return fetch(API+path+(opts.method?'':'?ref='+BRANCH+'&t='+Date.now()),opts).then(function(r){
+      if(!r.ok)return r.json().catch(function(){return{};}).then(function(j){var e=new Error(j.message||('HTTP '+r.status));e.status=r.status;throw e;});
+      return r.json();
+    });
+  }
+
+  // ---- connect
+  function connect(){
+    token=$('token').value.trim();
+    if(!token){$('connectMsg').textContent='Paste your GitHub token first.';return;}
+    $('connect').disabled=true;$('connectMsg').textContent='Connecting…';
+    gh('content.json').then(function(j){
+      sha=j.sha; data=JSON.parse(unb64(j.content));
+      if(!Array.isArray(data.slides))data.slides=[];
+      if($('remember').checked)store('seddik_admin_token',token);
+      $('connectCard').classList.add('hidden');
+      $('editor').classList.remove('hidden');$('bar').classList.remove('hidden');$('logout').classList.remove('hidden');
+      fillFields();renderVids();setStatus('Connected. No changes yet');
+    }).catch(function(e){
+      $('connectMsg').textContent=e.status===401?'That token was refused. Check that you copied all of it.':
+        e.status===404?'Token can\'t see the seddikportfolio repo. Give it access to that repo with Contents: Read and write.':'Could not connect: '+e.message;
+    }).then(function(){$('connect').disabled=false;});
+  }
+
+  // ---- fields
+  function fillFields(){
+    [].forEach.call(document.querySelectorAll('[data-k]'),function(el){
+      el.value=data[el.dataset.k]||'';
+      el.oninput=function(){data[el.dataset.k]=el.value;markDirty();};
+    });
+  }
+
+  // ---- videos
+  function preview(src){return src?(/^https?:/.test(src)?src:'../'+src):'';}
+  function renderVids(){
+    var box=$('vids');box.innerHTML='';
+    data.slides.forEach(function(s,i){
+      var el=document.createElement('div');el.className='vid';
+      var thumb=document.createElement('div');thumb.className='thumb';
+      if(s._local||s.src){var v=document.createElement('video');v.src=s._local||preview(s.src);v.muted=true;v.loop=true;v.playsInline=true;v.autoplay=true;v.setAttribute('playsinline','');thumb.appendChild(v);}
+      else thumb.appendChild(document.createTextNode('No video yet'));
+      var num=document.createElement('span');num.className='num';num.textContent=i+1;thumb.appendChild(num);
+
+      var f=document.createElement('div');f.className='vf';
+      f.appendChild(field('Title','title',s,'full'));
+      f.appendChild(field('Subtitle','subtitle',s));
+      f.appendChild(field('Tag','tag',s));
+      var src=document.createElement('div');src.className='full src';src.textContent=s.src?('File: '+s.src):'Upload a video to show it in the carousel.';
+      f.appendChild(src);
+
+      var t=document.createElement('div');t.className='tools';
+      var up=document.createElement('label');up.className='btn upl';up.textContent=s.src?'Replace video':'Upload video';
+      var inp=document.createElement('input');inp.type='file';inp.accept='video/mp4,video/webm,video/quicktime';inp.setAttribute('aria-label','Upload video for item '+(i+1));
+      inp.onchange=function(){if(inp.files[0])upload(inp.files[0],s,up);};
+      up.appendChild(inp);
+      t.appendChild(up);
+      t.appendChild(iconBtn('Move up','M18 15l-6-6-6 6',function(){move(i,-1);},i===0));
+      t.appendChild(iconBtn('Move down','M6 9l6 6 6-6',function(){move(i,1);},i===data.slides.length-1));
+      var del=iconBtn('Remove from carousel','M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3',function(){
+        data.slides.splice(i,1);renderVids();markDirty();
+      });del.classList.add('danger');t.appendChild(del);
+
+      el.appendChild(thumb);el.appendChild(f);el.appendChild(t);box.appendChild(el);
+    });
+  }
+  function field(lbl,k,s,cls){
+    var w=document.createElement('div');if(cls)w.className=cls;
+    var id='v'+Math.random().toString(36).slice(2);
+    var l=document.createElement('label');l.htmlFor=id;l.textContent=lbl;
+    var i=document.createElement('input');i.type='text';i.id=id;i.value=s[k]||'';
+    i.oninput=function(){s[k]=i.value;markDirty();};
+    w.appendChild(l);w.appendChild(i);return w;
+  }
+  function iconBtn(label,d,fn,disabled){
+    var b=document.createElement('button');b.className='btn icon';b.setAttribute('aria-label',label);b.title=label;b.disabled=!!disabled;
+    b.innerHTML='<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="'+d+'"/></svg>';
+    b.onclick=fn;return b;
+  }
+  function move(i,d){var a=data.slides;var t=a[i];a[i]=a[i+d];a[i+d]=t;renderVids();markDirty();}
+
+  function upload(file,s,btn){
+    if(file.size>95*1024*1024){setStatus('That file is '+Math.round(file.size/1048576)+' MB. GitHub accepts up to 95 MB here. Compress it and try again.','err');return;}
+    var ext=(file.name.split('.').pop()||'mp4').toLowerCase();
+    var base=file.name.replace(/\.[^.]+$/,'').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'').slice(0,40)||'video';
+    var path='videos/'+base+'-'+Date.now().toString(36)+'.'+ext;
+    busy++;$('save').disabled=true;btn.textContent='Uploading…';
+    setStatus('Uploading '+file.name+' ('+Math.round(file.size/1048576)+' MB)…');
+    var r=new FileReader();
+    r.onload=function(){
+      var content=String(r.result).split(',')[1];
+      fetch(API+path,{method:'PUT',headers:{'Authorization':'Bearer '+token,'Accept':'application/vnd.github+json'},
+        body:JSON.stringify({message:'Upload video '+file.name,content:content,branch:BRANCH})})
+      .then(function(res){if(!res.ok)return res.json().then(function(j){throw new Error(j.message||res.status);});return res.json();})
+      .then(function(){
+        s.src=path;s._local=URL.createObjectURL(file);
+        if(!s.title||/^\[/.test(s.title))s.title=base.replace(/-/g,' ');
+        renderVids();markDirty();setStatus('Video uploaded. Click Save and publish to put it on the site.');
+      })
+      .catch(function(e){setStatus('Upload failed: '+e.message,'err');btn.textContent='Upload video';})
+      .then(function(){busy--;if(!busy)$('save').disabled=false;});
+    };
+    r.readAsDataURL(file);
+  }
+
+  // ---- save
+  function save(){
+    if(busy){setStatus('Wait for the upload to finish.');return;}
+    $('save').disabled=true;setStatus('Saving…');
+    var out=JSON.parse(JSON.stringify(data,function(k,v){return k==='_local'?undefined:v;}));
+    gh('content.json',{method:'PUT',body:JSON.stringify({message:'Update site content from admin',content:b64(JSON.stringify(out,null,2)+'\n'),sha:sha,branch:BRANCH})})
+    .then(function(j){sha=j.content.sha;dirty=false;setStatus('Saved. The site updates in about 30 seconds.','ok');})
+    .catch(function(e){
+      setStatus(e.status===409?'The content changed somewhere else. Reload this page and make your changes again.':'Save failed: '+e.message,'err');
+    }).then(function(){$('save').disabled=false;});
+  }
+
+  $('connect').onclick=connect;
+  $('token').addEventListener('keydown',function(e){if(e.key==='Enter')connect();});
+  $('save').onclick=save;
+  $('addVid').onclick=function(){data.slides.push({src:'',title:'',subtitle:'',tag:''});renderVids();markDirty();
+    var all=document.querySelectorAll('.vid');all[all.length-1].scrollIntoView({behavior:'smooth',block:'center'});};
+  $('logout').onclick=function(){store('seddik_admin_token',null);location.reload();};
+  window.addEventListener('beforeunload',function(e){if(dirty){e.preventDefault();e.returnValue='';}});
+
+  var saved=read('seddik_admin_token');
+  if(saved){$('token').value=saved;connect();}
+})();
+</script>
+</body>
+</html>

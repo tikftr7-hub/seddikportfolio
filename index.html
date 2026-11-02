@@ -159,9 +159,9 @@ footer a:hover{color:var(--text)}
 
 <header class="hero" id="top">
   <div class="wrap">
-    <div class="pill"><b>Open</b> Taking 2 new SaaS launches this month</div>
-    <h1>Launch videos for SaaS that people actually watch.</h1>
-    <p>I'm Seddik, a motion designer. I animate your real product UI in After Effects and turn it into launch videos, demos and clips for X and LinkedIn.</p>
+    <div class="pill"><b>Open</b> <span data-field="pill">Taking 2 new SaaS launches this month</span></div>
+    <h1 data-field="headline">Launch videos for SaaS that people actually watch.</h1>
+    <p data-field="intro">I'm Seddik, a motion designer. I animate your real product UI in After Effects and turn it into launch videos, demos and clips for X and LinkedIn.</p>
     <div class="cta-row">
       <a class="btn btn-lime" href="#contact">Book a 15-min call</a>
       <a class="btn btn-dark" href="#work">See the work</a>
@@ -171,10 +171,7 @@ footer a:hover{color:var(--text)}
 
 <div class="show" id="work">
   <div class="wrap">
-    <!--
-      VIDEOS: on each .slide, set data-src="your-video.mp4" (and optionally data-poster="poster.jpg").
-      The script swaps the placeholder for a muted, looping video. Only the active one plays.
-    -->
+    <!-- Videos and texts come from content.json. Edit them at /admin. -->
     <div class="stage" id="stage" tabindex="0" role="region" aria-roledescription="carousel" aria-label="Portfolio videos">
       <div class="slide" data-src="" data-hue="250" aria-roledescription="slide">
         <div class="ph">[Video 1: SaaS launch video]</div>
@@ -219,7 +216,7 @@ footer a:hover{color:var(--text)}
       <article class="offer">
         <h3>Launch video</h3>
         <p class="o-sub">For a Product Hunt launch, a landing page hero or a paid ad.</p>
-        <div class="price">[PRICE] <small>one-time</small></div>
+        <div class="price"><span data-field="launchPrice">[PRICE]</span> <small>one-time</small></div>
         <ul>
           <li>45 to 90 seconds, built from your real UI</li>
           <li>Script and storyboard included</li>
@@ -231,7 +228,7 @@ footer a:hover{color:var(--text)}
       <article class="offer hot">
         <h3>Monthly content</h3>
         <p class="o-sub">You record for one hour a month. I turn it into clips for X and LinkedIn.</p>
-        <div class="price">[PRICE] <small>per month</small></div>
+        <div class="price"><span data-field="monthlyPrice">[PRICE]</span> <small>per month</small></div>
         <ul>
           <li>8 to 12 short clips with captions and UI animation</li>
           <li>1 animated feature demo</li>
@@ -246,7 +243,7 @@ footer a:hover{color:var(--text)}
   <section>
     <div class="sec-head">
       <h2>How a project runs</h2>
-      <p>Most launch videos ship in [X] days from the first call.</p>
+      <p>Most launch videos ship in <span data-field="days">[X]</span> days from the first call.</p>
     </div>
     <ol class="steps">
       <li><h3>Call</h3><p>15 minutes on your product, your audience and where the video will live.</p></li>
@@ -269,51 +266,82 @@ footer a:hover{color:var(--text)}
   <div class="contact" id="contact">
     <h2>Launching soon? Let's plan the video.</h2>
     <p>Book a 15-minute call. You'll leave with a rough idea for the video, even if we don't work together.</p>
-    <a class="btn btn-lime" href="https://calendly.com/[your-link]">Book a 15-min call</a>
-    <a class="mail" href="mailto:[your-email]">[your-email]</a>
+    <a class="btn btn-lime" data-link="calendly" href="https://calendly.com/[your-link]">Book a 15-min call</a>
+    <a class="mail" data-link="email" href="mailto:[your-email]">[your-email]</a>
   </div>
 </div>
 
 <footer>
   <div class="wrap">
     <span>© 2026 Seddik</span>
-    <span><a href="https://x.com/[handle]">X</a><a href="https://linkedin.com/in/[handle]">LinkedIn</a><a href="https://instagram.com/_.sdimohammed.edit">Instagram</a></span>
+    <span><a data-link="x" href="https://x.com/[handle]">X</a><a data-link="linkedin" href="https://linkedin.com/in/[handle]">LinkedIn</a><a data-link="instagram" href="https://instagram.com/_.sdimohammed.edit">Instagram</a></span>
   </div>
 </footer>
 
 <script>
 (function(){
   var stage=document.getElementById('stage');
-  var slides=[].slice.call(stage.querySelectorAll('.slide'));
   var dotsBox=document.getElementById('dots');
-  var n=slides.length, cur=0, timer=null;
   var reduce=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var HUES=[250,160,20,300,200,80,120,340];
+  var slides=[], n=0, cur=0, timer=null;
 
-  // placeholders + videos
-  slides.forEach(function(s,i){
-    var h=+s.dataset.hue||250;
-    var ph=s.querySelector('.ph');
-    ph.style.background='radial-gradient(circle at 30% 20%,hsl('+h+' 70% 30% / .9),transparent 60%),radial-gradient(circle at 80% 90%,hsl('+((h+60)%360)+' 70% 22% / .9),transparent 55%),#0E0E12';
-    if(s.dataset.src){
-      var v=document.createElement('video');
-      v.src=s.dataset.src; v.muted=true; v.loop=true; v.playsInline=true; v.preload='metadata';
-      if(s.dataset.poster)v.poster=s.dataset.poster;
-      ph.replaceWith(v);
+  function esc(t){var d=document.createElement('div');d.textContent=t==null?'':String(t);return d.innerHTML;}
+
+  // Fill texts and links from content.json
+  function applyContent(c){
+    [].forEach.call(document.querySelectorAll('[data-field]'),function(el){
+      var k=el.getAttribute('data-field'); if(c[k]!=null&&c[k]!=='')el.textContent=c[k];
+    });
+    var L={
+      calendly:c.calendly, email:c.email?'mailto:'+c.email:'',
+      x:c.x, linkedin:c.linkedin, instagram:c.instagram
+    };
+    [].forEach.call(document.querySelectorAll('[data-link]'),function(el){
+      var k=el.getAttribute('data-link');
+      if(L[k]){el.href=L[k]; if(k==='email')el.textContent=c.email;}
+      else if(k==='x'||k==='linkedin'||k==='instagram'){el.style.display='none';}
+    });
+    if(Array.isArray(c.slides)&&c.slides.length){
+      stage.innerHTML=c.slides.map(function(s){
+        return '<div class="slide" data-src="'+esc(s.src)+'" aria-roledescription="slide">'+
+          '<div class="ph">'+esc(s.title)+'</div>'+
+          '<div class="meta"><div><strong>'+esc(s.title)+'</strong><span>'+esc(s.subtitle)+'</span></div>'+
+          (s.tag?'<span class="tag">'+esc(s.tag)+'</span>':'')+'</div></div>';
+      }).join('');
     }
-    s.setAttribute('aria-label',(i+1)+' of '+n);
-    s.addEventListener('click',function(){ if(i!==cur){go(i);restart();} });
-    var hit=document.createElement('button');
-    hit.className='dot-hit'; hit.setAttribute('aria-label','Show video '+(i+1));
-    var d=document.createElement('span'); d.className='dot'; hit.appendChild(d);
-    hit.addEventListener('click',function(){go(i);restart();});
-    dotsBox.appendChild(hit);
-  });
+  }
+
+  function build(){
+    slides=[].slice.call(stage.querySelectorAll('.slide'));
+    n=slides.length; cur=0; dotsBox.innerHTML='';
+    slides.forEach(function(s,i){
+      var h=HUES[i%HUES.length];
+      var ph=s.querySelector('.ph');
+      ph.style.background='radial-gradient(circle at 30% 20%,hsl('+h+' 70% 30% / .9),transparent 60%),radial-gradient(circle at 80% 90%,hsl('+((h+60)%360)+' 70% 22% / .9),transparent 55%),#0E0E12';
+      if(s.dataset.src){
+        var v=document.createElement('video');
+        v.src=s.dataset.src; v.muted=true; v.loop=true; v.playsInline=true; v.preload='metadata';
+        v.setAttribute('playsinline','');
+        ph.replaceWith(v);
+      }
+      s.setAttribute('aria-label',(i+1)+' of '+n);
+      s.addEventListener('click',function(){ if(i!==cur){go(i);restart();} });
+      var hit=document.createElement('button');
+      hit.className='dot-hit'; hit.setAttribute('aria-label','Show video '+(i+1));
+      var d=document.createElement('span'); d.className='dot'; hit.appendChild(d);
+      hit.addEventListener('click',function(){go(i);restart();});
+      dotsBox.appendChild(hit);
+    });
+    layout(); restart();
+  }
 
   // layouts from the sketches: PC = coverflow with lower side cards; phone = tall card, next cards top-right, previous bottom-right
   var PC={0:[0,0,1],1:[.36,.30,.46],2:[.47,.42,.30],'-1':[-.36,.30,.46],'-2':[-.47,.42,.30]};
   var PHONE={0:[-.09,.5,1],1:[.29,.17,.36],2:[.39,.09,.26],'-1':[.29,.83,.36],'-2':[.39,.91,.26]};
 
   function layout(){
+    if(!n)return;
     var W=stage.clientWidth, mobile=W<640; if(mobile)stage.style.height=''; var H=stage.clientHeight;
     var w,h;
     if(mobile){h=H*.9;w=h*9/16;if(w>W*.66){w=W*.66;h=w*16/9;}}
@@ -342,8 +370,8 @@ footer a:hover{color:var(--text)}
     });
     [].forEach.call(dotsBox.querySelectorAll('.dot'),function(d,i){d.setAttribute('aria-current',i===cur?'true':'false');});
   }
-  function go(i){cur=(i+n)%n;layout();}
-  function restart(){ if(reduce)return; clearInterval(timer); timer=setInterval(function(){go(cur+1);},5000); }
+  function go(i){if(!n)return;cur=(i+n)%n;layout();}
+  function restart(){ if(reduce||n<2)return; clearInterval(timer); timer=setInterval(function(){go(cur+1);},5000); }
 
   document.getElementById('prev').addEventListener('click',function(){go(cur-1);restart();});
   document.getElementById('next').addEventListener('click',function(){go(cur+1);restart();});
@@ -354,7 +382,6 @@ footer a:hover{color:var(--text)}
   stage.addEventListener('mouseenter',function(){clearInterval(timer);});
   stage.addEventListener('mouseleave',restart);
 
-  // swipe
   var sx=null,sy=null;
   stage.addEventListener('pointerdown',function(e){sx=e.clientX;sy=e.clientY;});
   stage.addEventListener('pointerup',function(e){
@@ -362,9 +389,12 @@ footer a:hover{color:var(--text)}
     var dx=e.clientX-sx, dy=e.clientY-sy; sx=null;
     if(Math.abs(dx)>40&&Math.abs(dx)>Math.abs(dy)){go(cur+(dx<0?1:-1));restart();}
   });
-
   window.addEventListener('resize',layout);
-  layout(); restart();
+
+  fetch('content.json',{cache:'no-store'})
+    .then(function(r){if(!r.ok)throw 0;return r.json();})
+    .then(function(c){applyContent(c);build();})
+    .catch(function(){build();});
 })();
 </script>
 </body>
