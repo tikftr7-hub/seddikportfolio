@@ -26,8 +26,9 @@ main{max-width:980px;margin:0 auto;padding:28px 20px 120px}
 .grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
 .full{grid-column:1/-1}
 label{display:block;font-size:13px;font-weight:600;color:var(--muted);margin-bottom:6px}
-input[type=text],input[type=password],input[type=email],input[type=url],textarea{width:100%;background:var(--card-2);border:1px solid var(--line);border-radius:12px;color:var(--text);font:inherit;padding:11px 13px;min-height:44px}
+select,input[type=text],input[type=password],input[type=email],input[type=url],textarea{width:100%;background:var(--card-2);border:1px solid var(--line);border-radius:12px;color:var(--text);font:inherit;padding:11px 13px;min-height:44px}
 textarea{resize:vertical;min-height:84px}
+select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%239A9AA6' stroke-width='2.5'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center;padding-right:36px;cursor:pointer}
 input:focus,textarea:focus{border-color:var(--lime);outline:none}
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:44px;padding:0 18px;border-radius:999px;font:inherit;font-weight:700;border:1px solid var(--line);background:var(--card-2);color:var(--text);cursor:pointer;text-decoration:none}
 .btn:hover{background:#202027}
@@ -228,6 +229,14 @@ ol.steps li{margin-bottom:4px}
       f.appendChild(field('Title','title',s,'full'));
       f.appendChild(field('Subtitle','subtitle',s));
       f.appendChild(field('Tag','tag',s));
+      var fw=document.createElement('div');fw.className='full';
+      var fid='f'+Math.random().toString(36).slice(2);
+      var fl=document.createElement('label');fl.htmlFor=fid;fl.textContent='Format';
+      var fs=document.createElement('select');fs.id=fid;
+      [['','Auto (detect from the video)'],['vertical','Vertical 9:16'],['horizontal','Horizontal 16:9']].forEach(function(o){
+        var op=document.createElement('option');op.value=o[0];op.textContent=o[1];if((s.format||'')===o[0])op.selected=true;fs.appendChild(op);});
+      fs.onchange=function(){if(fs.value)s.format=fs.value;else delete s.format;markDirty();};
+      fw.appendChild(fl);fw.appendChild(fs);f.appendChild(fw);
       var lw=document.createElement('div');lw.className='full';
       var lid='l'+Math.random().toString(36).slice(2);
       var ll=document.createElement('label');ll.htmlFor=lid;ll.textContent='Video link (YouTube, Vimeo or .mp4)';
