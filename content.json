@@ -5,17 +5,65 @@
   "launchPrice": "[PRICE]",
   "monthlyPrice": "[PRICE]",
   "days": "[X]",
-  "email": "",
+  "email": "seddikbenkada@gmail.com",
   "calendly": "",
   "x": "",
   "linkedin": "",
-  "instagram": "https://instagram.com/_.sdimohammed.edit",
+  "instagram": "https://instagram.com/seedik.edit",
   "slides": [
-    { "src": "", "title": "[Product name]", "subtitle": "Launch video, 45s", "tag": "Launch" },
-    { "src": "", "title": "[Product name]", "subtitle": "Feature demo, 30s", "tag": "Demo" },
-    { "src": "", "title": "[Client name]", "subtitle": "LinkedIn clip, 20s", "tag": "Clip" },
-    { "src": "", "title": "[Product name]", "subtitle": "Paid ad, 15s", "tag": "Ad" },
-    { "src": "", "title": "[Product name]", "subtitle": "Onboarding, 60s", "tag": "Demo" },
-    { "src": "", "title": "Motion reel", "subtitle": "Selected work, 40s", "tag": "Reel" }
+    {
+      "src": "https://vimeo.com/1242473638",
+      "title": "Zidny 1",
+      "subtitle": "Launch video, 45s",
+      "tag": "Launch"
+    },
+    {
+      "src": "https://vimeo.com/1242473418",
+      "title": "Zidny 2",
+      "subtitle": "",
+      "tag": "Launch"
+    },
+    {
+      "src": "https://vimeo.com/1242473007",
+      "title": "Publii 1",
+      "subtitle": "",
+      "tag": "Announcement"
+    },
+    {
+      "src": "https://vimeo.com/1242473206",
+      "title": "Publii 2",
+      "subtitle": "",
+      "tag": "Ad"
+    },
+    {
+      "src": "https://vimeo.com/1242472781",
+      "title": "Fasse7 announcement",
+      "subtitle": "",
+      "tag": "Announcement"
+    },
+    {
+      "src": "https://vimeo.com/1242472612",
+      "title": "Doctor reel ",
+      "subtitle": "",
+      "tag": "Reel"
+    },
+    {
+      "src": "https://vimeo.com/1242472384",
+      "title": "Mdm motion graphic",
+      "subtitle": "",
+      "tag": ""
+    },
+    {
+      "src": "https://vimeo.com/1242472385",
+      "title": "Saas animation 1",
+      "subtitle": "",
+      "tag": ""
+    },
+    {
+      "src": "https://vimeo.com/1242472386",
+      "title": "Saas 2 ",
+      "subtitle": "",
+      "tag": ""
+    }
   ]
 }
